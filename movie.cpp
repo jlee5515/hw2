@@ -9,9 +9,10 @@
 using namespace std;
 
 Movie::Movie(const string category, const string name, double price, int qty, string genre, string rating):
-	Product(category, name, price, qty), genrex(genre), ratingx(rating)
+	Product(category, name, price, qty)
 {
-
+	genrex = genre;
+	ratingx = rating;
 }
 Movie::~Movie()
 {

@@ -1,5 +1,3 @@
-#define MOVIE_H
-
 #include <string>
 #include <iostream>
 #include <set>

@@ -1,3 +1,4 @@
+
 #include <string>
 #include <iostream>
 #include <set>
@@ -8,9 +9,10 @@
 using namespace std;
 
 Clothing::Clothing(const string category, const string name, double price, int qty, string size, string brand):
-	Product(category, name, price, qty), sizex(size), brandx(brand)
+	Product(category, name, price, qty)
 {
-
+	sizex = size;
+	brandx = brand;
 }
 
 Clothing::~Clothing()

@@ -9,9 +9,10 @@
 using namespace std;
 
 Book::Book(const string category, const string name, double price, int qty, string ISBN, string Author) : 
-    Product(category, name, price, qty), isbnx(ISBN), authorx(Author)
+	Product(category, name, price, qty)
 {
-
+	authorx = Author;
+	isbnx = ISBN;
 }
 
 Book::~Book()

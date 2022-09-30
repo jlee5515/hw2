@@ -1,5 +1,3 @@
-#define CLOTHING_H
-
 #include <string>
 #include <iostream>
 #include <set>
