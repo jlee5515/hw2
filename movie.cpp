@@ -5,6 +5,7 @@
 #include "movie.h"
 #include "util.h"
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -29,30 +30,12 @@ set<string> Movie::keywords() const {
 }
 
 string Movie::displayString() const {
-
-	string newString = "";
-	stringstream doubleprice;
-	doubleprice << price_;
-	string price = doubleprice.str();
-
-	stringstream intqauntity;
-	intqauntity << qty_;
-	string qty = intqauntity.str();
-
-	newString += name_;
-	newString += "\n";
-	newString += "Genre: ";
-	newString += genrex;
-	newString += " Rating: ";
-	newString += ratingx;
-	newString += "\n";
-	newString += price;
-	newString += " ";
-	newString += qty;
-	newString += " left.";
-	return newString;
+	ostringstream ss;
+	ss << fixed << setprecision(2) << price_;
+	string outPut = ss.str();
+	return name_ + "\nGenre: " + genrex + " Rating: " + ratingx + "\n" + outPut + " " + to_string(qty_) + " left."; 
 }
 
 void Movie::dump(std::ostream& os) const {
-	os << category_ << "\n" << name_ << "\n" << price_ << "\n" << qty_ << "\n" << genrex << "\n" << ratingx << endl;
+	os << category_ << endl << name_ << endl << price_ << endl << qty_ << endl << genrex << endl << ratingx << endl;
 }

@@ -73,57 +73,62 @@ std::vector<Product*> MyDataStore::search(std::vector<std::string>& terms, int t
 //Display the user's cart, if user is valid
 void MyDataStore::displayCart(string username){
 	if(cart.find(username) == cart.end()){
-		cout << "No username was found/invalid username. Please enter a valid username." << endl;
+		cout << "Invalid username" << endl;
 	}
 	else{
-		cout << username << "'s cart:" << endl;
 		for(unsigned int i = 0; i < cart[username].size(); i++){
-			cout << "Item " << i + 1 << ": " << (cart[username].at(i))->displayString() <<endl;
+			cout << "Item " << i + 1 << endl << (cart[username].at(i))->displayString() <<endl;
 		}
 	}
 }
 
 //Adds products to user's cart, if valid username and product. Will also create a mapping of username and cart if none exists
 void MyDataStore::addToCart(string username, Product* p){
-	if(cart.find(username) == cart.end()){ //No cart exists for the user, make one
-		if((p->getQty()) > 0){
-			vector<Product*> products;
-			products.push_back(p);
-			cart.insert(make_pair(username, products));
-			cout << "Added to cart." << endl;
+	if(cart.find(username) != cart.end()){ //User cart exists
+		if((p->getQty()) != 0){
+			cart[username].push_back(p);
 		}
 		else{
 			cout << "Item out of stock." << endl;
 		}
 	}
-	else{ //User cart exists
-		if((p->getQty()) > 0){
-			cart[username].push_back(p);
-			cout << "Added to cart." << endl;
+	if(user.find(username) != user.end()){ //No cart exists for the user, make one
+		if((p->getQty()) != 0){
+			vector<Product*> products;
+			products.push_back(p);
+			cart.insert(make_pair(username, products));
 		}
 		else{
 			cout << "Item out of stock." << endl;
 		}
+	}
+
+	else{
+		cout << "Invalid request" << endl;
 	}
 }
 
 //Purchases all purchasable items in user's cart, if user is valid. Reduces quantity of product and total balance of user, and removes item from cart
 void MyDataStore::purchaseCart(string username){
 	if(cart.find(username) != cart.end()){
-		vector<Product*> userItems = cart[username];
-		for(unsigned int i = 0; i < cart[username].size(); i++){
-			if(((userItems[i])->getQty()) > 0 && ((user[username])->getBalance()) >= ((userItems[i])->getPrice())){
-				(userItems[i])->subtractQty(1);
-				user[username]->deductAmount(((userItems[i])->getPrice()));
-				userItems.erase(userItems.begin()); //deletes item from temp vector
-				cart[username].erase(cart[username].begin()); //deletes item from the cart vector
+		vector<Product*> userItems;
+		for(std::vector<Product*>::iterator it = cart[username].begin(); it != cart[username].end() ; ++it){
+			double remainingBal = (user[username])->getBalance();
+			double priceT = (*it)->getPrice();
+			int qtyC = (*it)->getQty();
+			if(qtyC > 0 && remainingBal >= priceT){
+				(*it)->subtractQty(1);
+				(user[username])->deductAmount(priceT);
+			}
+			else {
+				userItems.push_back(*it);
+				continue;
 			}
 		}
 		cart[username] = userItems;
-		cout << "Possible purchases complete." << endl;
 	}
 	else{
-		cout << "Invalid Username" << endl;
+		cout << "Invalid username" << endl;
 	}
 }
 
@@ -135,8 +140,8 @@ void MyDataStore::dump(std::ostream& ofile) {
   }
 	ofile << "</products>" << endl;
 	ofile << "<users>" << endl;
-  for(set<User*>::iterator it = userSet.begin(); it != userSet.end(); ++it) {
-    (*it)->dump(ofile);
+  for(set<User*>::iterator it2 = userSet.begin(); it2 != userSet.end(); ++it2) {
+    (*it2)->dump(ofile);
   }
   ofile << "</users>" << endl;
 }

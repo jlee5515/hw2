@@ -6,6 +6,7 @@
 #include "clothing.h"
 #include "util.h"
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 Clothing::Clothing(const string category, const string name, double price, int qty, string size, string brand):
@@ -29,30 +30,12 @@ set<string> Clothing::keywords() const {
 	return totalkeywords;
 }
 string Clothing::displayString() const {
-		
-	stringstream doubleprice;
-	doubleprice << price_;
-	string price = doubleprice.str();
-
-	stringstream intqauntity;
-	intqauntity << qty_;
-	string qty = intqauntity.str();
-
-	string newString = "";
-	newString += name_;
-	newString += "\n";
-	newString += "Size: ";
-	newString += sizex;
-	newString += " Brand: ";
-	newString += brandx;
-	newString += "\n";
-	newString += price;
-	newString += " ";
-	newString += qty;
-	newString += " left.";
-	return newString;
+	ostringstream ss;
+	ss << fixed << setprecision(2) << price_;
+	string outPut = ss.str();
+	return name_ + "\nSize: " + sizex + " Brand: " + brandx +"\n" + outPut + " " + to_string(qty_) + " left."; 
 }
 
 void Clothing::dump(std::ostream& os) const {
-	os << category_ << "\n" << name_ << "\n" << price_ << "\n" << qty_ << "\n" << sizex << "\n" << brandx << endl;
+	os << category_ << endl << name_ << endl << price_ << endl << qty_ << endl << sizex << endl << brandx << endl;
 }
